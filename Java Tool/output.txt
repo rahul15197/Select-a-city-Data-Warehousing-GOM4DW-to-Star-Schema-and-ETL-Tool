@@ -1,0 +1,45 @@
+Fact Table ['medium_id', 'stand_id', 'stadium_id', 'tournament_id', 'sponsorship_id', 'match_id', 'sponsor_id', 'region_id', 'viewership_id', 'team_id', 'gate_collections_id', 'time_id', 'city_id', 'attendance', 'seat_count', 'match_expenses', 'digital_adv_cost', 'view_count', 'price', 'base_price', 'booked_seats', 'sponsorship_money', 'gate_collections', 'number_of_guards', 'outdoor_adv_cost', 'accomodation_cost', 'security_cost', 'debt', 'promotion_cost', 'sponsorship', 'misc_cost', 'tax', 'survillance_system', 'hospitality_charges', 'transport_cost', 'social_media_adv_cost', 'viewership', 'budget']
+--------------------------------
+Time Dimension Table ['time_id', 'date', 'day', 'week', 'month', 'quarter', 'year']
+--------------------------------
+team Dimension Table: ['team_id', 'team_name', 'group_name', 'city', 'head_count', 'allocated_hotel']
+--------------------------------
+tournament Dimension Table: ['tournament_id', 'team_count', 'start_date', 'city_id', 'match_count', 'tournament_name', 'end_date']
+--------------------------------
+city Dimension Table: ['city_name', 'past_tournaments', 'financial_stability', 'city_id', 'popularity']
+--------------------------------
+match Dimension Table: ['datetime', 'match_number', 'team_a', 'match_id', 'team_b']
+--------------------------------
+stand Dimension Table: ['stand_name', 'stand_id', 'stadium_name']
+--------------------------------
+stadium Dimension Table: ['capacity', 'stadium_name', 'stadium_id']
+--------------------------------
+gate collections Dimension Table: ['price', 'seat_count', 'gate_collections_id', 'booked_seats']
+--------------------------------
+viewership Dimension Table: ['viewership_id', 'view_count']
+--------------------------------
+sponsorship Dimension Table: ['sponsorship_id', 'sponsorship_money']
+--------------------------------
+sponsor Dimension Table: ['contract', 'sponsor_name', 'sponsor_id']
+--------------------------------
+region Dimension Table: ['region_name', 'region_id']
+--------------------------------
+medium Dimension Table: ['medium_id', 'medium_type']
+--------------------------------
+Creating schema with fact and dimension tables...
+CREATE  TABLE DBO.team_TABLE (team_id int IDENTITY(1,1) PRIMARY KEY,team_name text,group_name text,city text,head_count int,allocated_hotel text);
+CREATE  TABLE DBO.city_TABLE (city_name text,past_tournaments bit,financial_stability text,city_id int IDENTITY(1,1) PRIMARY KEY,popularity int);
+CREATE  TABLE DBO.match_TABLE (datetime timestamp,match_number int,team_a text,match_id int IDENTITY(1,1) PRIMARY KEY,team_b text);
+CREATE  TABLE DBO.stand_TABLE (stand_name text,stand_id int IDENTITY(1,1) PRIMARY KEY,stadium_name text);
+CREATE  TABLE DBO.stadium_TABLE (capacity int,stadium_name text,stadium_id int IDENTITY(1,1) PRIMARY KEY);
+CREATE  TABLE DBO.gate_collections_TABLE (price float(4),seat_count int,gate_collections_id int IDENTITY(1,1) PRIMARY KEY,booked_seats int);
+CREATE  TABLE DBO.viewership_TABLE (viewership_id int IDENTITY(1,1) PRIMARY KEY,view_count int);
+CREATE  TABLE DBO.sponsorship_TABLE (sponsorship_id int IDENTITY(1,1) PRIMARY KEY,sponsorship_money float(4));
+CREATE  TABLE DBO.sponsor_TABLE (contract int,sponsor_name text,sponsor_id int IDENTITY(1,1) PRIMARY KEY);
+CREATE  TABLE DBO.region_TABLE (region_name text,region_id int IDENTITY(1,1) PRIMARY KEY);
+CREATE  TABLE DBO.medium_TABLE (medium_id int IDENTITY(1,1) PRIMARY KEY,medium_type text);
+CREATE  TABLE DBO.tournament_TABLE (tournament_id int IDENTITY(1,1) PRIMARY KEY,team_count int,start_date date,city_id int REFERENCES city_TABLE(city_id),match_count int,tournament_name text,end_date date);
+CREATE TABLE DBO.TIME_TABLE (time_id int,date date,day int,week int,month int,quarter int,year int);
+CREATE  TABLE DBO.FACT_TABLE (tournament_id int REFERENCES tournament_TABLE(tournament_id),match_id int REFERENCES match_TABLE(match_id),sponsorship_id int REFERENCES sponsorship_TABLE(sponsorship_id),time_id int REFERENCES TIME_TABLE(time_id),sponsor_id int REFERENCES sponsor_TABLE(sponsor_id),medium_id int REFERENCES medium_TABLE(medium_id),viewership_id int REFERENCES viewership_TABLE(viewership_id),stadium_id int REFERENCES stadium_TABLE(stadium_id),city_id int REFERENCES city_TABLE(city_id),region_id int REFERENCES region_TABLE(region_id),stand_id int REFERENCES stand_TABLE(stand_id),team_id int REFERENCES team_TABLE(team_id),gate_collections_id int REFERENCES gate_collections_TABLE(gate_collections_id),seat_count int,digital_adv_cost float(4),booked_seats int,debt float(4),view_count int,transport_cost float(4),attendance int,social_media_adv_cost float(4),outdoor_adv_cost float(4),survillance_system text,hospitality_charges float(4),security_cost float(4),tax float(4),price float(4),budget float(4),promotion_cost float(4),base_price float(4),accomodation_cost float(4),match_expenses float(4),misc_cost float(4),number_of_guards int,sponsorship_money float(4)); 
+Schema created!
+
